@@ -1,0 +1,1 @@
+insert into user (id, username, password, created_at, updated_at) value (1,"user","admin",now(),now() );
