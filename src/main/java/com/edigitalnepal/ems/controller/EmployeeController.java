@@ -1,9 +1,47 @@
 package com.edigitalnepal.ems.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.edigitalnepal.ems.message.ResponseMessage;
+import com.edigitalnepal.ems.model.Employee;
+import com.edigitalnepal.ems.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+    @Autowired
+    EmployeeService employeeService;
+
+    @GetMapping
+    public ResponseEntity<?> get(Pageable pageable) {
+        ResponseMessage<?> responseMessage = employeeService.get(pageable);
+        return new ResponseEntity<ResponseMessage<?>>(responseMessage, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> get(@PathVariable Long id) {
+        ResponseMessage<?> responseMessage = employeeService.get(id);
+        return new ResponseEntity<ResponseMessage<?>>(responseMessage, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody Employee employee) {
+        ResponseMessage<?> responseMessage = employeeService.save(employee);
+        return new ResponseEntity<ResponseMessage<?>>(responseMessage, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Employee employee) {
+        ResponseMessage<?> responseMessage = employeeService.update(id, employee);
+        return new ResponseEntity<ResponseMessage<?>>(responseMessage, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        ResponseMessage<?> responseMessage = employeeService.delete(id);
+        return new ResponseEntity<ResponseMessage<?>>(responseMessage, HttpStatus.OK);
+    }
 }
